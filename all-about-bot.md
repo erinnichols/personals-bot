@@ -1,0 +1,5 @@
+I've been a fan of [@\_personals\_](https://www.instagram.com/_personals_) for a while. As someone old enough to remember personal ads in the back of alt-weeklies, and the inestimably awesome _On Our Backs_ magazine, as well as the early online versions on nerve.com in the early 2000s, I found the new format fascinating. It's a throwback to the old days, but full of modern language and identities. (The same was true in the 80s and 90s!)
+
+I'm also a huge fan of neural network-generated comedy. One of my favorites was this [Coachella poster](https://botnik.org/content/coachella.html). Something about the specific absurdity cracked me up dozens of times.
+
+Most of what even well-trained neural networks produce is nonsense. But some percentage is the right amount of absurd. Computers can understand our language, especially something as specific as the style of queer personal ads posted as images. [But they still need curation by a human](https://fivethirtyeight.com/features/some-like-it-bot/).
