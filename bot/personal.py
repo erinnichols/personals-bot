@@ -10,30 +10,32 @@ from bot.filters import NoPadPunctuation, RightPadPunctuation, LeftPadPunctuatio
 
 
 class PostConfig(object):
-    START_X = 100
-    START_Y = 200
+    START_X = 144
+    START_Y = 288
     START_COORDS = (START_X, START_Y)
-    IMAGE_SIZE = (750, 936)
+    IMAGE_SIZE = (1080, 1350)
     FONTS = {
         'heading': {
             'family': '/Library/Fonts/Courier New Bold.ttf',
-            'size': 32,
+            'size': 47,
             'color': 'rgb(0, 0, 0)',
             # 'color': 'rgb(255, 255, 255)'
         },
         'body': {
             'family': '/Library/Fonts/Courier New.ttf',
-            'size': 32,
+            'size': 47,
             'color': 'rgb(0, 0, 0)',
             # 'color': 'rgb(255, 255, 255)'
         },
-        'spacing': 10
+        'spacing': 15
     }
     BACKGROUND = [
         (0, 255, 255),   # cyan
         (244, 254, 253), # extremely light cyan
         # (41, 102, 198),  # blue
     ]
+    HEADING_TEXT_WRAP_CHARS = 24
+    BODY_TEXT_WRAP_CHARS = 28
 
     @staticmethod
     def get_body_start_coords(heading_lines):
@@ -45,7 +47,7 @@ class PostConfig(object):
         )
 
 class Personal(object):
-    def __init__(self, heading, body, handle, location):
+    def __init__(self, heading=None, body=None, handle=None, location=None):
         self._heading = heading.strip()
         self._body = body.strip()
         self._handle = handle.strip()
@@ -53,7 +55,7 @@ class Personal(object):
 
     @property
     def heading(self):
-        return '\n'.join(textwrap.wrap(self._heading, 24))
+        return '\n'.join(textwrap.wrap(self._heading, PostConfig.HEADING_TEXT_WRAP_CHARS))
 
     @property
     def body(self):
@@ -65,7 +67,7 @@ class Personal(object):
         b = self._body
         for filter in filters:
             b = filter(b).apply()
-        return '\n'.join(textwrap.wrap(b, 30))
+        return '\n'.join(textwrap.wrap(b, PostConfig.BODY_TEXT_WRAP_CHARS))
 
     @property
     def handle(self):
@@ -73,7 +75,7 @@ class Personal(object):
 
     @property
     def location(self):
-        return '\n'.join(textwrap.wrap(self._location, 30))
+        return '\n'.join(textwrap.wrap(self._location, PostConfig.BODY_TEXT_WRAP_CHARS))
 
     @property
     def identifier(self):
@@ -123,6 +125,21 @@ class Personal(object):
         )
         filename = 'ads-draft/personal-%s.png' % self.identifier
         image.save(filename)
+
+
+def write_full_ads(n=1, temp=.5):
+    textgen = textgenrnn(
+        weights_path='personals_weights.hdf5',
+        vocab_path='personals_vocab.json',
+        config_path='personals_config.json'
+    )
+    results = textgen.generate(n, return_as_list=True, temperature=temp)
+    for i in range(n):
+        result = results[i]
+        lines = [l for l in result.split(' || ') if l]
+        ad = Personal(lines[0], ' '.join(lines[1:-2]), lines[-2], lines[-1])
+        ad.preview()
+        ad.save_ad()
 
 
 def write_ads(n=1, heading_temp=.5, handle_temp=1.5, location_temp=.6, body_temp=.6):
