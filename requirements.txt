@@ -1,4 +1,4 @@
 Pillow==5.4.1
 requests==2.21.0
-tensorflow==1.13.1
+tensorflow==1.15.0
 textgenrnn==1.5.0
